@@ -26,10 +26,16 @@ def single_gpu_test(model, data_loader, show=False):
         results.append(result)
 
         if show:
+            if isinstance(dataset.CLASSES, str):
+                labels = [dataset.CLASSES]
+            elif isinstance(dataset.CLASSES, (list,tuple)):
+                labels = dataset.CLASSES
+            elif isinstance(dataset.CLASSES, (set)):
+                labels = [cat for i,cat in enumerate(dataset.CLASSES)]
             model.module.show_result(data,
                                      result,
                                      dataset.img_norm_cfg,
-                                     dataset=dataset.CLASSES)
+                                     dataset=labels)
 
         batch_size = data['img'][0].size(0)
         for _ in range(batch_size):
